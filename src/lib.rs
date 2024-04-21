@@ -2,13 +2,26 @@ pub mod a_stepper;
 use std::sync::Mutex;
 
 use a_stepper::AStepper;
+use kira::{
+    manager::{backend::DefaultBackend, AudioManager, AudioManagerSettings},
+    sound::static_sound::{StaticSoundData, StaticSoundSettings},
+    spatial::{
+        emitter::{EmitterDistances, EmitterSettings},
+        listener::ListenerSettings,
+        scene::SpatialSceneSettings,
+    },
+    tween::Tween,
+};
 use stereokit_rust::{
     maths::{units::*, Pose, Quat, Vec2, Vec3},
     sk::{Sk, StepperAction},
     sprite::Sprite,
     system::{Log, LogLevel, Renderer},
     tex::SHCubemap,
-    tools::log_window::{LogItem, LogWindow},
+    tools::{
+        log_window::{LogItem, LogWindow},
+        os_api::open_asset,
+    },
     ui::{Ui, UiBtnLayout},
     util::{
         named_colors::{BLUE, LIGHT_BLUE, LIGHT_CYAN, WHITE},
@@ -111,6 +124,27 @@ pub fn launch(mut sk: Sk, event_loop: EventLoop<StepperAction>, _is_testing: boo
     // launch AStepper a basic stepper
     sk.push_action(StepperAction::add_default::<AStepper>("AStepper"));
 
+    // Kira sound test >>>
+    let mut plane_sound_inst = None;
+    if let Some(plane_sound) = open_asset(sk.get_sk_info_clone(), "sounds/plane_engine.mp3") {
+        let mut audio_manager = AudioManager::<DefaultBackend>::new(AudioManagerSettings::default()).unwrap();
+        let mut spatial_scene = audio_manager.add_spatial_scene(SpatialSceneSettings::default()).unwrap();
+        let emitter_settings = EmitterSettings::default();
+        let emitter_settings =
+            emitter_settings.distances(EmitterDistances::from((1.0, 1000.0))).persist_until_sounds_finish(true);
+        let emitter = spatial_scene.add_emitter([5.0, 5.0, 5.0], emitter_settings).unwrap();
+        let _listener = spatial_scene
+            .add_listener([0.0, 0.0, 0.0], [1.0, 1.0, 1.0, 1.0], ListenerSettings::default())
+            .unwrap();
+        let sound_settings = StaticSoundSettings::new().loop_region(0.0..35.0).output_destination(&emitter);
+        audio_manager
+            .play(StaticSoundData::from_media_source(plane_sound, sound_settings).unwrap())
+            .unwrap();
+
+        plane_sound_inst = Some(audio_manager);
+    }
+    // <<<<<<<<<<<<
+
     Log::diag(
         "======================================================================================================== !!",
     );
@@ -145,6 +179,11 @@ pub fn launch(mut sk: Sk, event_loop: EventLoop<StepperAction>, _is_testing: boo
 
             Ui::window_end();
         },
-        |sk| Log::info(format!("QuitReason is {:?}", sk.get_quit_reason())),
+        |sk| {
+            if let Some(sound) = plane_sound_inst.take() {
+                let _err = sound.pause(Tween::default());
+            }
+            Log::info(format!("QuitReason is {:?}", sk.get_quit_reason()))
+        },
     );
 }

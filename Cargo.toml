@@ -20,6 +20,7 @@ crate-type = ["lib", "cdylib"]
 [dependencies]
 stereokit-rust = { path = "../stereokit-rust"} #, features = ["build-dynamic-openxr"] }
 winit = { version = "0.29", features = [ "android-native-activity" ] }
+kira = "0.8"
 
 [target.'cfg(target_os = "android")'.dependencies]
 log = "0.4"
