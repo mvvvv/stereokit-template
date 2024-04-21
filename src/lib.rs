@@ -1,5 +1,8 @@
 pub mod a_stepper;
-use std::sync::Mutex;
+use std::{
+    path::{Path, PathBuf},
+    sync::Mutex,
+};
 
 use a_stepper::AStepper;
 use kira::{
@@ -20,7 +23,7 @@ use stereokit_rust::{
     tex::SHCubemap,
     tools::{
         log_window::{LogItem, LogWindow},
-        os_api::open_asset,
+        os_api::get_external_path,
     },
     ui::{Ui, UiBtnLayout},
     util::{
@@ -126,7 +129,22 @@ pub fn launch(mut sk: Sk, event_loop: EventLoop<StepperAction>, _is_testing: boo
 
     // Kira sound test >>>
     let mut plane_sound_inst = None;
-    if let Some(plane_sound) = open_asset(sk.get_sk_info_clone(), "sounds/plane_engine.mp3") {
+    let mut sound_path: Option<PathBuf> = None;
+    if cfg!(target_os = "android") {
+        //---Assets are compressed so we use the external data path
+        if let Some(dir_path) = get_external_path(sk.get_sk_info_clone()) {
+            let file = dir_path.join("plane_engine.mp3p");
+            if file.exists() && file.is_file() {
+                sound_path = Some(file);
+            } else {
+                Log::err("the sound file must be copied (using adb) to Android/data/com.stereokit.rust_binding_template/files/plane_engine.mp3")
+            }
+        }
+    } else {
+        let path_text = env!("CARGO_MANIFEST_DIR").to_owned() + "/assets";
+        sound_path = Some(Path::new(path_text.as_str()).join("sounds/plane_engine.mp3"));
+    }
+    if let Some(plane_sound) = sound_path {
         let mut audio_manager = AudioManager::<DefaultBackend>::new(AudioManagerSettings::default()).unwrap();
         let mut spatial_scene = audio_manager.add_spatial_scene(SpatialSceneSettings::default()).unwrap();
         let emitter_settings = EmitterSettings::default();
@@ -137,9 +155,7 @@ pub fn launch(mut sk: Sk, event_loop: EventLoop<StepperAction>, _is_testing: boo
             .add_listener([0.0, 0.0, 0.0], [1.0, 1.0, 1.0, 1.0], ListenerSettings::default())
             .unwrap();
         let sound_settings = StaticSoundSettings::new().loop_region(0.0..35.0).output_destination(&emitter);
-        audio_manager
-            .play(StaticSoundData::from_media_source(plane_sound, sound_settings).unwrap())
-            .unwrap();
+        audio_manager.play(StaticSoundData::from_file(plane_sound, sound_settings).unwrap()).unwrap();
 
         plane_sound_inst = Some(audio_manager);
     }
