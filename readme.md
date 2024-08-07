@@ -24,6 +24,7 @@ If you're using VsCode you'll see two launchers in launch.json to debug the proj
 * Launch: `cargo apk run`
 
 ## Build the release versions of your project:
+For Android you'll have to set a [keystore](https://developer.android.com/studio/publish/app-signing) see [cargo-apk](https://github.com/rust-mobile/cargo-apk) to store the path and keyword
 * Desktop : `cargo build --release`
 * Android : `cargo apk build --release`
 
