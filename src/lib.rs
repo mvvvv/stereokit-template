@@ -97,8 +97,13 @@ pub fn launch(mut sk: Sk, event_loop: EventLoop<StepperAction>, _is_testing: boo
     sk.push_action(StepperAction::add("LogWindow", log_window));
     // Open or close the log window
     let event_loop_proxy = sk.get_event_loop_proxy().clone().unwrap();
-    let send_event_show_log = move || {
-        let _ = &event_loop_proxy.send_event(StepperAction::event("main".to_string(), "ShowLogWindow", "1"));
+    let mut send_event_show_log = move || {
+        show_log = !show_log;
+        let _ = &event_loop_proxy.send_event(StepperAction::event(
+            "main".to_string(),
+            "ShowLogWindow",
+            &show_log.to_string(),
+        ));
     };
 
     // we will have a window to trigger some actions
