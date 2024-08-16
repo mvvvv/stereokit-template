@@ -21,13 +21,13 @@
         {
             "type": "lldb",
             "request": "launch",
-            "name": "Debug unit tests in library 'stereokit-template'",
+            "name": "Debug unit tests in library 'stereokit-rust-gradle-template'",
             "cargo": {
                 "args": [
                     "test",
                     "--no-run",
                     "--lib",
-                    "--package=stereokit-template"
+                    "--package=stereokit_rust_gradle_template"
                 ],
                 "filter": {
                     "name": "stereokit-template",

@@ -2,13 +2,18 @@
 
 ### Download the source project then this template:
 * git clone --recursive https://github.com/mvvvv/StereoKit-rust/
-* git clone https://github.com/mvvvv/stereokit-template/
+* git clone https://github.com/mvvvv/stereokit-gradle-template/
 
 First, check that you can launch the Stereokit-rust demos as described here https://github.com/mvvvv/StereoKit-rust/blob/master/README.md
 
-Then, go to the Stereokit-template project and transform it to your project :
-- by renaming the name, package and labels in Cargo.toml, 
-- and removing the .git in order to create yours,
+Then, go to the Stereokit-gradle-template project and transform it to your project:
+- by setting the right values of android.ndksDirectory and android.ndkVersion,
+- by renaming the package.name in Cargo.toml, 
+- by renaming cargo.libName (same as package.name from Cargo.toml), android.applicationId and android.main in gradle.properties,
+- by deleting or modifying the path and package's name of MainActivity.java (your choice impacts android.main &uarr; and android:hasCode attribute in AndroidManifest.xml),
+- and removing the .git folder in order to create yours.
+
+The file AndroidManifest.xml is under the single Android module `./app` [where you could add some Java classes if needed](https://developer.android.com/studio/projects#ProjectView except for res and assets which are here at the root of the project)
 
 ### Run your project on your PC's headset :
 * Make sure you have [OpenXR installed](https://www.khronos.org/openxr/) with an active runtine.
@@ -20,19 +25,23 @@ Then, go to the Stereokit-template project and transform it to your project :
 If you're using VsCode you'll see two launchers in launch.json to debug the project.
 
 
-## Run the project on your Android headset:
-* Launch: `cargo apk run`
+## Run the project on your Android headset thanks to gradle:
+* install openjdk v8 or v17
+* install [gradle](https://gradle.org/install/) v8.9 or more
+* launch `cargo install cargo-ndk`
+* launch `rustup target add aarch64-linux-android `
+* create a [keystore](https://developer.android.com/studio/publish/app-signing) then a file [.gradle/gradle.properties](https://www.repeato.app/creating-a-release-signed-apk-file-using-gradle/) to store and forget the confidential values
+* Run the debug then show the Android log for this project
+    - On Windows launch: `./gradlew run && cmd /c logcat.cmd`
+    - On others launch: `./gradlew run && sh logcat.cmd`
 
 ## Build the release versions of your project:
-For Android you'll have to set a [keystore](https://developer.android.com/studio/publish/app-signing). See [cargo-apk](https://github.com/rust-mobile/cargo-apk) to store the path and keyword
-* Desktop : `cargo build --release`
-* Android : `cargo apk build --release`
-
-Binaries and APK archives are produced under ./target/release
+* Desktop : `cargo build --release` &rarr; Binaries are produced under ./target/release
+* Android : `./gradlew buildRelease` &rarr; APK archive is produced under ./app/build/outputs/apk. You can install it with './gradlew installRelease'
 
 ## Compile shaders
 If you want to create your own shaders, you'll need the binary `compile_sks` of the stereokit-rust project and so you have to 'install' the project: 
-* `cargo install --path <path to git directory of Stereokit-rust>`
+* `cargo install --path <path to git directory of StereoKit-rust>`
 
 `compile_sks` calls the stereokit binary `skshaderc` using the following configuration:
 * The shaders (*.hlsl files) must be created inside the shaders_src directory inside the root directory of your project. 
