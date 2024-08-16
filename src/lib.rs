@@ -53,6 +53,7 @@ pub fn _main(sk: Sk, event_loop: EventLoop<StepperAction>) {
     let is_testing = false;
     Log::diag("Launch my_vr_program");
     launch(sk, event_loop, is_testing);
+    Sk::shutdown();
 }
 
 pub fn launch(mut sk: Sk, event_loop: EventLoop<StepperAction>, _is_testing: bool) {
