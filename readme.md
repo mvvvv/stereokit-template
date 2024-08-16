@@ -2,7 +2,7 @@
 
 ### Download the source project then this template:
 * git clone --recursive https://github.com/mvvvv/StereoKit-rust/
-* git clone https://github.com/mvvvv/stereokit-gradle-template/
+* git clone -b gradle https://github.com/mvvvv/stereokit-gradle-template/
 
 First, check that you can launch the Stereokit-rust demos as described here https://github.com/mvvvv/StereoKit-rust/blob/master/README.md
 
