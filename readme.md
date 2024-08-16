@@ -1,4 +1,5 @@
 ## Template for a basic stereokit-rust program
+There are two other templates (see the branches) if you prefer to use gradle for android or if you do not want to use winit and want to have an android version (gradle then being the only solution available)
 
 ### Download the source project then this template:
 * git clone --recursive https://github.com/mvvvv/StereoKit-rust/
