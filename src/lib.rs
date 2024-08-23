@@ -13,22 +13,38 @@ use android_activity::AndroidApp;
 #[no_mangle]
 /// The main function for android app
 fn android_main(app: AndroidApp) {
-    use stereokit_rust::sk::{DepthMode, OriginMode, SkSettings};
-    use stereokit_rust::system::LogLevel;
-    let mut settings = SkSettings::default();
-    settings
-        .app_name("stereokit-rust")
-        .assets_folder("assets")
-        .origin(OriginMode::Floor)
-        .render_multisample(4)
-        .render_scaling(2.0)
-        .depth_mode(DepthMode::Stencil)
-        .log_filter(LogLevel::Diagnostic);
+    let app_loop = app.clone();
+    use std::thread;
+    // In the main thread we purge the first events.
+    Sk::poll_first_events(&app);
 
-    android_logger::init_once(android_logger::Config::default().with_max_level(log::LevelFilter::Debug));
-    stereokit_rust::system::BackendOpenXR::request_ext("XR_FB_passthrough");
+    // Then we create the thread_SK
+    if let Ok(thread) = thread::Builder::new().name("thread_SK".to_string()).spawn(move || loop {
+        use stereokit_rust::sk::{DepthMode, OriginMode, SkSettings};
+        use stereokit_rust::system::LogLevel;
+        let mut settings = SkSettings::default();
+        settings
+            .app_name("rust_gradle")
+            .assets_folder("assets")
+            .origin(OriginMode::Floor)
+            .render_multisample(4)
+            .render_scaling(2.0)
+            .depth_mode(DepthMode::Stencil)
+            .log_filter(LogLevel::Diagnostic);
 
-    _main(settings.init(app).unwrap());
+        android_logger::init_once(
+            android_logger::Config::default().with_max_level(log::LevelFilter::Debug).with_tag("SKit-rs"),
+        );
+
+        let app_init = app.clone();
+        let sk = settings.init(app_init).unwrap();
+
+        _main(sk);
+    }) {
+        while !thread.is_finished() {
+            app_loop.poll_events(None, |poll_event| Log::diag(format!("!!!!!!Event : {:?}", poll_event)));
+        }
+    }
 }
 
 pub fn _main(sk: Sk) {

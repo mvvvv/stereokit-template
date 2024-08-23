@@ -1,0 +1,8 @@
+{
+    "rust-analyzer.cargo.features": [
+
+    ],
+
+    "!!!!rust-analyzer.cargo.target": "aarch64-linux-android",
+    "!!!!rust-analyzer.cargo.buildScripts.enable": false,
+}
