@@ -125,9 +125,8 @@ tasks.whenTaskAdded { task ->
 
 for (target in cargo.targets) {
       tasks.register("copy_libc++_shared${target.capitalize()}", Copy) {
-        def ndkDir = findProperty('android.ndksDirectory') + android.ndkVersion
+        def ndkDir = System.getenv("ANDROID_NDK_ROOT")
         // hostTag, abi and archTriple from: https://developer.android.com/ndk/guides/other_build_systems
-
         def hostTag
         if (Os.isFamily(Os.FAMILY_WINDOWS)) {
             if (Os.isArch("x86_64") || Os.isArch("amd64")) {
