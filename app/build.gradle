@@ -19,12 +19,15 @@ if (openxr.contains("build-dynamic-openxr")) {
     libDirs=[openxr] 
 }
 
+def ndkDir = System.getenv("ANDROID_NDK_ROOT")
+
 // android plugin https://developer.android.com/build?hl=fr
 apply plugin: 'com.android.application'
 android {
     namespace findProperty("android.applicationId") 
     compileSdk 33
-    ndkVersion findProperty("android.ndkVersion") 
+
+    ndkVersion = new File(ndkDir).getName()
 
     compileSdkVersion rootProject.findProperty("android.compileSdkVersion") as Integer
     defaultConfig {
@@ -125,7 +128,7 @@ tasks.whenTaskAdded { task ->
 
 for (target in cargo.targets) {
       tasks.register("copy_libc++_shared${target.capitalize()}", Copy) {
-        def ndkDir = System.getenv("ANDROID_NDK_ROOT")
+
         // hostTag, abi and archTriple from: https://developer.android.com/ndk/guides/other_build_systems
         def hostTag
         if (Os.isFamily(Os.FAMILY_WINDOWS)) {
