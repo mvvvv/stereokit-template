@@ -7,7 +7,6 @@
 First, check that you can launch the Stereokit-rust demos as described here https://github.com/mvvvv/StereoKit-rust/blob/master/README.md
 
 Then, go to the Stereokit-gradle-template project and transform it to your project:
-- by setting the right values of android.ndksDirectory and android.ndkVersion,
 - by renaming the package.name in Cargo.toml, 
 - by renaming cargo.libName (same as package.name from Cargo.toml), android.applicationId and android.main in gradle.properties,
 - by deleting or modifying the path and package's name of MainActivity.java (your choice impacts android.main &uarr; and android:hasCode attribute in AndroidManifest.xml),
