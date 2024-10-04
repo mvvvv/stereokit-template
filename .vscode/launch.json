@@ -40,7 +40,7 @@
         {
             "type": "lldb",
             "request": "launch",
-            "name": "Debug with simulator 'demos'",
+            "name": "Debug with simulator",
             "cargo": {"args":  [
                 "build", "--manifest-path", "${fileDirname}/../Cargo.toml"
             ], },
@@ -50,7 +50,7 @@
         {
             "type": "lldb",
             "request": "launch",
-            "name": "Debug with PC headset 'demos'",
+            "name": "Debug with PC headset",
             "cargo": {"args":  [
                 "build", "--manifest-path", "${fileDirname}/../Cargo.toml"
             ], },
