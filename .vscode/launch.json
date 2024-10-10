@@ -35,7 +35,10 @@
                 }
             },
             "args": [],
-            "cwd": "${workspaceFolder}"
+            "cwd": "${workspaceFolder}",
+            // For Windows only, we have to find the dll >>>>>
+            "env":{"PATH": "${workspaceFolder}/target/debug/deps;${env:PATH}"},
+
         },
         {
             "type": "lldb",
@@ -45,7 +48,10 @@
                 "build", "--manifest-path", "${fileDirname}/../Cargo.toml"
             ], },
             "args": ["--test"],
-            "cwd": "${workspaceFolder}"
+            "cwd": "${workspaceFolder}",
+            // For Windows only, we have to find the dll >>>>>
+            "env":{"PATH": "${workspaceFolder}/target/debug/deps;${env:PATH}"},
+
         },
         {
             "type": "lldb",
@@ -55,7 +61,9 @@
                 "build", "--manifest-path", "${fileDirname}/../Cargo.toml"
             ], },
             "args": [],
-            "cwd": "${workspaceFolder}"
+            "cwd": "${workspaceFolder}",
+            // For Windows only, we have to find the dll >>>>>
+            "env":{"PATH": "${workspaceFolder}/target/debug/deps;${env:PATH}"},
         },
 
     ]
