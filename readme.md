@@ -3,6 +3,7 @@
 ### Download the source project then this template:
 * git clone --recursive https://github.com/mvvvv/StereoKit-rust/
 * git clone -b gradle https://github.com/mvvvv/stereokit-gradle-template/
+* For Windows only add to the PATH environment variable the directory ./target/debug/deps
 
 First, check that you can launch the Stereokit-rust demos as described here https://github.com/mvvvv/StereoKit-rust/blob/master/README.md
 
@@ -31,7 +32,7 @@ If you're using VsCode you'll see two launchers in launch.json to debug the proj
 * launch `rustup target add aarch64-linux-android `
 * create a [keystore](https://developer.android.com/studio/publish/app-signing) then a file [.gradle/gradle.properties](https://www.repeato.app/creating-a-release-signed-apk-file-using-gradle/) to store and forget the confidential values
 * Run the debug then show the Android log for this project
-    - On Windows launch: `./gradlew run && cmd /c logcat.cmd`
+    - On Windows launch: `./gradlew.bat run && cmd /c logcat.cmd` or `(./gradlew.bat run) -and (cmd /c logcat.cmd)`
     - On others launch: `./gradlew run && sh logcat.cmd`
 
 ## Build the release versions of your project:
