@@ -27,7 +27,6 @@ If you're using VsCode you'll see two launchers in launch.json to debug the proj
 
 ## Run the project on your Android headset thanks to gradle:
 * install openjdk v8 or v17
-* install [gradle](https://gradle.org/install/) v8.9 or more
 * launch `cargo install cargo-ndk`
 * launch `rustup target add aarch64-linux-android `
 * create a [keystore](https://developer.android.com/studio/publish/app-signing) then a file [.gradle/gradle.properties](https://www.repeato.app/creating-a-release-signed-apk-file-using-gradle/) to store and forget the confidential values
