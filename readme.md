@@ -4,6 +4,7 @@ There are two other templates (see the branches) if you prefer to use gradle for
 ### Download the source project then this template:
 * git clone --recursive https://github.com/mvvvv/StereoKit-rust/
 * git clone https://github.com/mvvvv/stereokit-template/
+* For Windows only add to the PATH environment variable the directory ./target/debug/deps
 
 First, check that you can launch the Stereokit-rust demos as described here https://github.com/mvvvv/StereoKit-rust/blob/master/README.md
 
