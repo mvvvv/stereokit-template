@@ -23,12 +23,12 @@ If you're using VsCode you'll see two launchers in launch.json to debug the proj
 
 
 ## Run the project on your Android headset:
-* Launch: `cargo apk run`
+* Launch: `cargo apk run --lib`
 
 ## Build the release versions of your project:
 For Android you'll have to set a [keystore](https://developer.android.com/studio/publish/app-signing). See [cargo-apk](https://github.com/rust-mobile/cargo-apk) to store the path and keyword
 * Desktop : `cargo build --release`
-* Android : `cargo apk build --release`
+* Android : `cargo apk build --lib --release`
 
 Binaries and APK archives are produced under ./target/release
 
