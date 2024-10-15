@@ -69,6 +69,6 @@ task run {
 
 tasks.register("buildRelease") {
     description = "Build the Apk for Release"
-    dependsOn ":app:assembleDebug"
+    dependsOn ":app:assembleRelease"
 }
 
