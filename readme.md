@@ -8,19 +8,21 @@ There are two other templates (see the branches) if you prefer to use gradle for
 
 First, check that you can launch the Stereokit-rust demos as described here https://github.com/mvvvv/StereoKit-rust/blob/master/README.md
 
-Then, go to the Stereokit-template project and transform it to your project :
+Then, go to the Stereokit-template project and transform it to your project:
 - by renaming the name, package and labels in Cargo.toml, 
 - and removing the .git in order to create yours,
 
-### Run your project on your PC's headset :
+### Run your project on your PC's headset:
 * Make sure you have [OpenXR installed](https://www.khronos.org/openxr/) with an active runtine.
 * Launch: `cargo run`
 
-### Run your project on your PC using the [simulator](https://stereokit.net/Pages/Guides/Using-The-Simulator.html) 
+### Run your project on your PC using the [simulator](https://stereokit.net/Pages/Guides/Using-The-Simulator.html): 
 * Launch: `cargo run  -- --test`
 
 If you're using VsCode you'll see two launchers in launch.json to debug the project.
 
+### Build and create an exportable repository of your PCVR program:
+`cargo build_sk_rs <the path of your exportable repository>`
 
 ## Run the project on your Android headset:
 * Launch: `cargo apk run --lib`
@@ -32,7 +34,7 @@ For Android you'll have to set a [keystore](https://developer.android.com/studio
 
 Binaries and APK archives are produced under ./target/release
 
-## Compile shaders
+## Compile shaders:
 If you want to create your own shaders, you'll need the binary `compile_sks` of the stereokit-rust project and so you have to 'install' the project: 
 * `cargo install --path <path to git directory of Stereokit-rust>`
 
