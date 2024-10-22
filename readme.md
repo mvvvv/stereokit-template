@@ -15,15 +15,17 @@ Then, go to the Stereokit-gradle-template project and transform it to your proje
 
 The file AndroidManifest.xml is under the single Android module `./app` [where you could add some Java classes if needed](https://developer.android.com/studio/projects#ProjectView except for res and assets which are here at the root of the project)
 
-### Run your project on your PC's headset :
+### Run your project on your PC's headset:
 * Make sure you have [OpenXR installed](https://www.khronos.org/openxr/) with an active runtine.
 * Launch: `cargo run`
 
-### Run your project on your PC using the [simulator](https://stereokit.net/Pages/Guides/Using-The-Simulator.html) 
+### Run your project on your PC using the [simulator](https://stereokit.net/Pages/Guides/Using-The-Simulator.html): 
 * Launch: `cargo run  -- --test`
 
 If you're using VsCode you'll see two launchers in launch.json to debug the project.
 
+### Build and create an exportable repository of your PCVR program:
+`cargo build_sk_rs <the path of your exportable repository>`
 
 ## Run the project on your Android headset thanks to gradle:
 * install openjdk v8 or v17

@@ -1,6 +1,6 @@
 #include "stereokit.hlsli"
 
-//--color:color = 1, 1 , 1, 0.5
+//--color:color = 1, 1 , 1, 1
 //--diffuse     = white
 
 float4       color;
@@ -17,8 +17,6 @@ struct vsIn {
 struct psIn {
     float4 pos       : SV_Position;
     float2 uv        : TEXCOORD0;
-
-    float3 normal    : NORMAL0;
     float4 color     : COLOR0;
     uint view_id : SV_RenderTargetArrayIndex;
 };
