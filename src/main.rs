@@ -43,7 +43,7 @@ fn main() {
     settings
         .app_name("rust_gradle")
         .assets_folder("assets")
-        .origin(OriginMode::Stage)
+        .origin(OriginMode::Floor)
         .render_scaling(2.0)
         .depth_mode(DepthMode::D32)
         .omit_empty_frames(true)
@@ -60,8 +60,6 @@ fn main() {
     }
 
     launch(is_testing, settings.init().unwrap());
-    // let (sk, event_loop) = settings.init_with_event_loop().unwrap();
-    // launch(sk, event_loop, is_testing);
     Sk::shutdown();
 }
 
