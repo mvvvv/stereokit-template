@@ -4,6 +4,7 @@ use std::sync::Mutex;
 use a_stepper::AStepper;
 use stereokit_rust::{
     event_loop::{SkClosures, StepperAction},
+    include_asset_tree,
     maths::{units::*, Pose, Quat, Vec2, Vec3},
     sk::Sk,
     sprite::Sprite,
@@ -112,6 +113,9 @@ pub fn launch(mut sk: Sk, event_loop: EventLoop<StepperAction>, _is_testing: boo
     // we will have a window to trigger some actions
     let mut window_demo_pose = Pose::new(Vec3::new(-0.7, 1.5, -0.3), Some(Quat::look_dir(Vec3::new(1.0, 0.0, 1.0))));
     let demo_win_width = 50.0 * CM;
+
+    // Log the assets directory:
+    Log::diag(format!("Assets : {:?}", include_asset_tree!("assets")));
 
     // we create a sky dome to be able to switch from the default sky dome
     let mut gradient_sky = Gradient::new(None);
