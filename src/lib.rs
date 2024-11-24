@@ -5,7 +5,7 @@ use a_stepper::AStepper;
 use stereokit_rust::{
     event_loop::{SkClosures, StepperAction},
     maths::{units::*, Pose, Quat, Vec2, Vec3},
-    sk::Sk,
+    sk::{DisplayBlend, Sk},
     sprite::Sprite,
     system::{Log, LogLevel, Renderer},
     tex::SHCubemap,
@@ -16,7 +16,7 @@ use stereokit_rust::{
     ui::{Ui, UiBtnLayout},
     util::{
         named_colors::{BLUE, LIGHT_BLUE, LIGHT_CYAN, WHITE},
-        Color128, Gradient,
+        Color128, Device, Gradient,
     },
 };
 use winit::event_loop::EventLoop;
@@ -135,8 +135,9 @@ pub fn launch(mut sk: Sk, event_loop: EventLoop<StepperAction>, _is_testing: boo
     sk.push_action(StepperAction::add_default::<AStepper>("AStepper"));
 
     let mut passthrough = true;
-    let passthrough_enabled = stereokit_rust::system::BackendOpenXR::ext_enabled("XR_FB_passthrough");
-    if passthrough_enabled {
+    let mut passthough_blend_enabled = false;
+    let passthrough_fb_enabled = stereokit_rust::system::BackendOpenXR::ext_enabled("XR_FB_passthrough");
+    if passthrough_fb_enabled {
         sk.push_action(StepperAction::add_default::<stereokit_rust::tools::passthrough_fb_ext::PassthroughFbExt>(
             "PassthroughFbExt",
         ));
@@ -146,6 +147,14 @@ pub fn launch(mut sk: Sk, event_loop: EventLoop<StepperAction>, _is_testing: boo
                 stereokit_rust::tools::passthrough_fb_ext::PASSTHROUGH_FLIP,
                 "1",
             ));
+            Log::diag("Passthrough Activated at start !!");
+        } else {
+            Log::diag("Passthrough Deactived at start !!");
+        }
+    } else if Device::valid_blend(DisplayBlend::AnyTransparent) {
+        passthough_blend_enabled = true;
+        if passthrough {
+            Device::display_blend(DisplayBlend::AnyTransparent);
             Log::diag("Passthrough Activated at start !!");
         } else {
             Log::diag("Passthrough Deactived at start !!");
@@ -174,7 +183,7 @@ pub fn launch(mut sk: Sk, event_loop: EventLoop<StepperAction>, _is_testing: boo
                 sky = 2;
             }
             Ui::same_line();
-            if passthrough_enabled {
+            if passthrough_fb_enabled || passthough_blend_enabled {
                 if let Some(new_value) = Ui::toggle("Passthrough MR", passthrough, None) {
                     passthrough = new_value;
                     let mut string_value = "0";
@@ -184,7 +193,13 @@ pub fn launch(mut sk: Sk, event_loop: EventLoop<StepperAction>, _is_testing: boo
                     } else {
                         Log::diag("Deactivate passthrough");
                     }
-                    sk.push_action(StepperAction::event("main".into(), PASSTHROUGH_FLIP, string_value))
+                    if passthrough_fb_enabled {
+                        sk.push_action(StepperAction::event("main".into(), PASSTHROUGH_FLIP, string_value));
+                    } else if string_value == "1" {
+                        Device::display_blend(DisplayBlend::AnyTransparent);
+                    } else {
+                        Device::display_blend(DisplayBlend::Opaque);
+                    }
                 }
                 Ui::same_line();
             }
