@@ -57,7 +57,7 @@ fn main() {
             settings.mode(AppMode::Simulator);
         }
     }
-    settings.standby_mode(StandbyMode::None);
+    settings.standby_mode(StandbyMode::Default);
 
     let (sk, event_loop) = settings.init_with_event_loop().unwrap();
     launch(sk, event_loop, is_testing);

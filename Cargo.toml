@@ -13,11 +13,12 @@ crate-type = ["lib", "cdylib"]
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 [dependencies]
-stereokit-rust = { path = "../StereoKit-rust", features= ["event-loop"] } #,"build-dynamic-openxr", "force-local-deps"] }
+stereokit-rust = { path = "../StereoKit-rust", features= ["event-loop"] } #, "force-local-deps"] }
 stereokit-macros = { path = "../StereoKit-rust/stereokit-macros"} 
 winit = { version = "0.30", features = [ "android-native-activity" ] }
 
 [target.'cfg(target_os = "android")'.dependencies]
+stereokit-rust = { path = "../StereoKit-rust", features= ["event-loop", "build-dynamic-openxr"]} #, "force-local-deps"] }
 log = "0.4"
 android_logger = "0.14"
 #android-activity = { version = "0.6", features = [ "native-activity" ] }
