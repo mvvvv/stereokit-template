@@ -7,7 +7,7 @@ keywords = ["stereokit", "XR", "VR", "AR", "sys"]
 license = "MIT"
 repository = "https://github.com/mvvvv/StereoKit-template"
 readme = "README.md"
-
+ 
 [lib]
 crate-type = ["lib", "cdylib"]
 
