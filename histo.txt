@@ -9,7 +9,7 @@ cargo run  -- --test`
 cargo build --release 
 cargo build_sk_rs ../sk_builds/SK_template_linux/
 cargo build_sk_rs  --x64-win-gnu ../x64-mingw-libs/  ../sk_builds/SK_template_win_gnu/
-cargo build_sk_rs  --x64-win-gnu --gl ../x64-mingw-libs/ ../sk_builds/SK_template_win_gnu/
+cargo build_sk_rs  --x64-win-gnu ../x64-mingw-libs/ --gl  ../sk_builds/SK_template_win_gnu/
 
 #---- building for android
 cargo compile_sks --options -f -t e
