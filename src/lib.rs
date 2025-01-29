@@ -1,16 +1,16 @@
-pub mod a_stepper;
+pub mod c_stepper;
 use std::sync::Mutex;
 
-use a_stepper::AStepper;
+use c_stepper::CStepper;
 use stereokit_rust::{
     event_loop::{SkClosures, StepperAction},
     maths::{units::*, Pose, Quat, Vec2, Vec3},
-    sk::{DisplayBlend, Sk},
+    sk::{DisplayBlend, Sk, SkInfo},
     sprite::Sprite,
     system::{Log, LogLevel, Renderer},
     tex::SHCubemap,
     tools::{
-        log_window::{LogItem, LogWindow},
+        log_window::{LogItem, LogWindow, SHOW_LOG_WINDOW},
         passthrough_fb_ext::PASSTHROUGH_FLIP,
     },
     ui::{Ui, UiBtnLayout},
@@ -38,7 +38,6 @@ fn android_main(app: AndroidApp) {
     let mut settings = SkSettings::default();
     settings
         .app_name("rust_gradle")
-        .assets_folder("assets")
         .origin(OriginMode::Floor)
         .render_multisample(4)
         .render_scaling(2.0)
@@ -98,19 +97,12 @@ pub fn launch(mut sk: Sk, event_loop: EventLoop<StepperAction>, _is_testing: boo
     log_window.pose = Pose::new(Vec3::new(-0.7, 2.0, -0.3), Some(Quat::look_dir(Vec3::new(1.0, 0.0, 1.0))));
 
     let mut show_log = false;
-    log_window.show(show_log);
+    log_window.enabled = false;
 
     sk.push_action(StepperAction::add("LogWindow", log_window));
     // Open or close the log window
-    let event_loop_proxy = sk.get_event_loop_proxy().clone().unwrap();
-    let mut send_event_show_log = move || {
-        show_log = !show_log;
-        let _ = &event_loop_proxy.send_event(StepperAction::event(
-            "main".to_string(),
-            "ShowLogWindow",
-            &show_log.to_string(),
-        ));
-    };
+    let send_event_show_log =
+        SkInfo::get_message_closure(&Some(sk.get_sk_info_clone()), &"main".into(), SHOW_LOG_WINDOW);
 
     // we will have a window to trigger some actions
     let mut window_demo_pose = Pose::new(Vec3::new(-0.7, 1.5, -0.3), Some(Quat::look_dir(Vec3::new(1.0, 0.0, 1.0))));
@@ -132,7 +124,7 @@ pub fn launch(mut sk: Sk, event_loop: EventLoop<StepperAction>, _is_testing: boo
     let mut sky = 1;
 
     // launch AStepper a basic stepper
-    sk.push_action(StepperAction::add_default::<AStepper>("AStepper"));
+    sk.push_action(StepperAction::add_default::<CStepper>("CStepper"));
 
     let mut passthrough = true;
     let mut passthough_blend_enabled = false;
@@ -162,7 +154,6 @@ pub fn launch(mut sk: Sk, event_loop: EventLoop<StepperAction>, _is_testing: boo
     } else {
         Log::diag("No Passthrough !!")
     }
-
     Log::diag(
         "======================================================================================================== !!",
     );
@@ -207,7 +198,7 @@ pub fn launch(mut sk: Sk, event_loop: EventLoop<StepperAction>, _is_testing: boo
             Ui::hspace(0.11);
             if let Some(new_value) = Ui::toggle("Show Log", show_log, None) {
                 show_log = new_value;
-                send_event_show_log();
+                send_event_show_log(show_log.to_string());
             }
             Ui::next_line();
             Ui::hseparator();

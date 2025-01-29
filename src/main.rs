@@ -42,7 +42,6 @@ fn main() {
     let mut settings = SkSettings::default();
     settings
         .app_name("rust_gradle")
-        .assets_folder("assets")
         .origin(OriginMode::Floor)
         .render_scaling(2.0)
         .depth_mode(DepthMode::D32)
