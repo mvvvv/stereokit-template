@@ -34,7 +34,7 @@ task launchDebug(type: Exec) {
     dependsOn ":app:installDebug"
     def packageS = findProperty("android.applicationId")
     def main = findProperty("android.main")
-    def runCommand = ['adb', '-d', 'shell', 'am', 'start', '-a', 'android.intent.action.MAIN', '-n', packageS + "/" + main]
+    def runCommand = ['adb', 'shell', 'am', 'start', '-a', 'android.intent.action.MAIN', '-n', packageS + "/" + main]
     commandLine runCommand
 }
 
@@ -47,7 +47,7 @@ task getUid {
         def fileContents = new File(logcatCmd).getText()
         new ByteArrayOutputStream().withStream { uid ->
             def result = exec {
-                commandLine = ['adb', '-d',  'shell', 'pm', 'list', 'package', '-U', packageS]
+                commandLine = ['adb', 'shell', 'pm', 'list', 'package', '-U', packageS]
                 standardOutput = uid
             }
             def app_uid = uid.toString().tokenize(':')[-1]

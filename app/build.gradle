@@ -95,7 +95,7 @@ apply plugin: 'org.mozilla.rust-android-gradle.rust-android'
 cargo {
     module  = ".."                          // where is your Cargo.toml
     libname = findProperty("cargo.libname") // Cargo.toml's [package] name.
-    targets = ["arm64"]                     // the only one that VR requires
+    targets = findProperty("cargo.targets").split(",")   // the only ones that VR requires
     prebuiltToolchains = true
     //apiLevel = 21
     //verbose = true
@@ -127,7 +127,7 @@ tasks.whenTaskAdded { task ->
 }
 
 for (target in cargo.targets) {
-      tasks.register("copy_libc++_shared${target.capitalize()}", Copy) {
+    tasks.register("copy_libc++_shared${target.capitalize()}", Copy) {
 
         // hostTag, abi and archTriple from: https://developer.android.com/ndk/guides/other_build_systems
         def hostTag
