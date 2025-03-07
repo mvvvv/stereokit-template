@@ -3,7 +3,7 @@ use std::sync::Mutex;
 
 use c_stepper::CStepper;
 use stereokit_rust::{
-    event_loop::{SkClosures, StepperAction},
+    framework::{SkClosures, StepperAction},
     maths::{units::*, Pose, Quat, Vec2, Vec3},
     sk::{DisplayBlend, Sk, SkInfo},
     sprite::Sprite,
@@ -99,10 +99,9 @@ pub fn launch(mut sk: Sk, event_loop: EventLoop<StepperAction>, _is_testing: boo
     let mut show_log = false;
     log_window.enabled = false;
 
-    sk.push_action(StepperAction::add("LogWindow", log_window));
+    sk.send_event(StepperAction::add("LogWindow", log_window));
     // Open or close the log window
-    let send_event_show_log =
-        SkInfo::get_message_closure(&Some(sk.get_sk_info_clone()), &"main".into(), SHOW_LOG_WINDOW);
+    let send_event_show_log = SkInfo::get_message_closure(Some(sk.get_sk_info_clone()), "main".into(), SHOW_LOG_WINDOW);
 
     // we will have a window to trigger some actions
     let mut window_demo_pose = Pose::new(Vec3::new(-0.7, 1.5, -0.3), Some(Quat::look_dir(Vec3::new(1.0, 0.0, 1.0))));
@@ -124,17 +123,17 @@ pub fn launch(mut sk: Sk, event_loop: EventLoop<StepperAction>, _is_testing: boo
     let mut sky = 1;
 
     // launch AStepper a basic stepper
-    sk.push_action(StepperAction::add_default::<CStepper>("CStepper"));
+    sk.send_event(StepperAction::add_default::<CStepper>("CStepper"));
 
     let mut passthrough = true;
     let mut passthough_blend_enabled = false;
     let passthrough_fb_enabled = stereokit_rust::system::BackendOpenXR::ext_enabled("XR_FB_passthrough");
     if passthrough_fb_enabled {
-        sk.push_action(StepperAction::add_default::<stereokit_rust::tools::passthrough_fb_ext::PassthroughFbExt>(
+        sk.send_event(StepperAction::add_default::<stereokit_rust::tools::passthrough_fb_ext::PassthroughFbExt>(
             "PassthroughFbExt",
         ));
         if passthrough {
-            sk.push_action(StepperAction::event(
+            sk.send_event(StepperAction::event(
                 "main".into(),
                 stereokit_rust::tools::passthrough_fb_ext::PASSTHROUGH_FLIP,
                 "1",
@@ -185,7 +184,7 @@ pub fn launch(mut sk: Sk, event_loop: EventLoop<StepperAction>, _is_testing: boo
                         Log::diag("Deactivate passthrough");
                     }
                     if passthrough_fb_enabled {
-                        sk.push_action(StepperAction::event("main".into(), PASSTHROUGH_FLIP, string_value));
+                        sk.send_event(StepperAction::event("main".into(), PASSTHROUGH_FLIP, string_value));
                     } else if string_value == "1" {
                         Device::display_blend(DisplayBlend::AnyTransparent);
                     } else {
