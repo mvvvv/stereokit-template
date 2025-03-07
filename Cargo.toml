@@ -19,7 +19,7 @@ winit = { version = "0.30", features = [ "android-native-activity" ] }
 [target.'cfg(target_os = "android")'.dependencies]
 stereokit-rust = { path = "../StereoKit-rust", features= ["event-loop", "build-dynamic-openxr"]} #, "force-local-deps"] }
 log = "0.4"
-android_logger = "0.14"
+android_logger = "0.15"
 #android-activity = { version = "0.6", features = [ "native-activity" ] }
 ndk-context = "0.1.1"
 ndk = "0.9.0"
