@@ -7,12 +7,9 @@ use stereokit_rust::{
     maths::{units::*, Pose, Quat, Vec2, Vec3},
     sk::{DisplayBlend, Sk, SkInfo},
     sprite::Sprite,
-    system::{Log, LogLevel, Renderer},
+    system::{Log, LogItem, LogLevel, Renderer},
     tex::SHCubemap,
-    tools::{
-        log_window::{LogItem, LogWindow, SHOW_LOG_WINDOW},
-        passthrough_fb_ext::PASSTHROUGH_FLIP,
-    },
+    tools::log_window::{LogWindow, SHOW_LOG_WINDOW},
     ui::{Ui, UiBtnLayout},
     util::{
         named_colors::{BLUE, LIGHT_BLUE, LIGHT_CYAN, WHITE},
@@ -47,7 +44,6 @@ fn android_main(app: AndroidApp) {
     android_logger::init_once(
         android_logger::Config::default().with_max_level(log::LevelFilter::Debug).with_tag("SKit-rs"),
     );
-    stereokit_rust::system::BackendOpenXR::request_ext("XR_FB_passthrough");
     let (sk, event_loop) = settings.init_with_event_loop(app).unwrap();
 
     _main(sk, event_loop);
@@ -101,7 +97,7 @@ pub fn launch(mut sk: Sk, event_loop: EventLoop<StepperAction>, _is_testing: boo
 
     sk.send_event(StepperAction::add("LogWindow", log_window));
     // Open or close the log window
-    let send_event_show_log = SkInfo::get_message_closure(Some(sk.get_sk_info_clone()), "main".into(), SHOW_LOG_WINDOW);
+    let send_event_show_log = SkInfo::get_message_closure(Some(sk.get_sk_info_clone()), "main", SHOW_LOG_WINDOW);
 
     // we will have a window to trigger some actions
     let mut window_demo_pose = Pose::new(Vec3::new(-0.7, 1.5, -0.3), Some(Quat::look_dir(Vec3::new(1.0, 0.0, 1.0))));
@@ -127,22 +123,7 @@ pub fn launch(mut sk: Sk, event_loop: EventLoop<StepperAction>, _is_testing: boo
 
     let mut passthrough = true;
     let mut passthough_blend_enabled = false;
-    let passthrough_fb_enabled = stereokit_rust::system::BackendOpenXR::ext_enabled("XR_FB_passthrough");
-    if passthrough_fb_enabled {
-        sk.send_event(StepperAction::add_default::<stereokit_rust::tools::passthrough_fb_ext::PassthroughFbExt>(
-            "PassthroughFbExt",
-        ));
-        if passthrough {
-            sk.send_event(StepperAction::event(
-                "main".into(),
-                stereokit_rust::tools::passthrough_fb_ext::PASSTHROUGH_FLIP,
-                "1",
-            ));
-            Log::diag("Passthrough Activated at start !!");
-        } else {
-            Log::diag("Passthrough Deactived at start !!");
-        }
-    } else if Device::valid_blend(DisplayBlend::AnyTransparent) {
+    if Device::valid_blend(DisplayBlend::AnyTransparent) {
         passthough_blend_enabled = true;
         if passthrough {
             Device::display_blend(DisplayBlend::AnyTransparent);
@@ -173,21 +154,14 @@ pub fn launch(mut sk: Sk, event_loop: EventLoop<StepperAction>, _is_testing: boo
                 sky = 2;
             }
             Ui::same_line();
-            if passthrough_fb_enabled || passthough_blend_enabled {
+            if passthough_blend_enabled {
                 if let Some(new_value) = Ui::toggle("Passthrough MR", passthrough, None) {
                     passthrough = new_value;
-                    let mut string_value = "0";
                     if new_value {
                         Log::diag("Activate passthrough");
-                        string_value = "1";
-                    } else {
-                        Log::diag("Deactivate passthrough");
-                    }
-                    if passthrough_fb_enabled {
-                        sk.send_event(StepperAction::event("main".into(), PASSTHROUGH_FLIP, string_value));
-                    } else if string_value == "1" {
                         Device::display_blend(DisplayBlend::AnyTransparent);
                     } else {
+                        Log::diag("Deactivate passthrough");
                         Device::display_blend(DisplayBlend::Opaque);
                     }
                 }
