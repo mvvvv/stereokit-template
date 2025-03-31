@@ -8,9 +8,9 @@ use stereokit_rust::{
     maths::{units::*, Pose, Quat, Vec2, Vec3},
     sk::{Sk, SkInfo},
     sprite::Sprite,
-    system::{Log, LogLevel, Renderer},
+    system::{Log, LogItem, LogLevel, Renderer},
     tex::SHCubemap,
-    tools::log_window::{LogItem, LogWindow, SHOW_LOG_WINDOW},
+    tools::log_window::{LogWindow, SHOW_LOG_WINDOW},
     ui::{Ui, UiBtnLayout},
     util::{
         named_colors::{BLUE, LIGHT_BLUE, LIGHT_CYAN, WHITE},
@@ -99,7 +99,7 @@ pub fn launch(mut sk: Sk, event_loop: EventLoop<StepperAction>, _is_testing: boo
 
     sk.send_event(StepperAction::add("LogWindow", log_window));
     // Open or close the log window
-    let send_event_show_log = SkInfo::get_message_closure(Some(sk.get_sk_info_clone()), "main".into(), SHOW_LOG_WINDOW);
+    let send_event_show_log = SkInfo::get_message_closure(Some(sk.get_sk_info_clone()), "main", SHOW_LOG_WINDOW);
 
     // we will have a window to trigger some actions
     let mut window_demo_pose = Pose::new(Vec3::new(-0.7, 1.5, -0.3), Some(Quat::look_dir(Vec3::new(1.0, 0.0, 1.0))));
