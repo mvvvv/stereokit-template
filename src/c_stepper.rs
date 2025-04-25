@@ -36,9 +36,9 @@ impl Default for CStepper {
             enabled: true,
             shutdown_completed: false,
 
-            transform: Matrix::tr(&((Vec3::NEG_Z * 2.5) + Vec3::Y), &Quat::from_angles(0.0, 180.0, 0.0)),
+            transform: Matrix::IDENTITY,
             round_cube: None,
-            text: "Stepper C".to_owned(),
+            text: "Stepper\nC".to_owned(),
             text_style: None,
         }
     }
@@ -68,7 +68,8 @@ impl CStepper {
 
     /// Called from IStepper::step, after check_event here you can draw your UI and scene
     fn draw(&mut self, token: &MainThreadToken) {
-        self.transform *= Matrix::r(Quat::from_angles(0.0, 10.0 * Time::get_stepf(), 0.0));
+        self.transform
+            .update_t_r(&(Vec3::NEG_Z * 2.5 + Vec3::Y), &Quat::from_angles(0.0, 50.0 * Time::get_totalf(), 0.0));
         if let Some(round_cube) = &self.round_cube {
             Renderer::add_mesh(token, round_cube, Material::pbr(), self.transform, Some(RED.into()), None);
         }

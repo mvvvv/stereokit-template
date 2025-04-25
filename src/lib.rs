@@ -90,7 +90,7 @@ pub fn launch(mut sk: Sk, event_loop: EventLoop<StepperAction>, _is_testing: boo
     // need a way to do that properly Log::unsubscribe(fn_mut);
 
     let mut log_window = LogWindow::new(&LOG_LOG);
-    log_window.pose = Pose::new(Vec3::new(-0.7, 2.0, -0.3), Some(Quat::look_dir(Vec3::new(1.0, 0.0, 1.0))));
+    log_window.window_pose = Pose::new(Vec3::new(-0.7, 2.0, -0.3), Some(Quat::look_dir(Vec3::new(1.0, 0.0, 1.0))));
 
     let mut show_log = false;
     log_window.enabled = false;
@@ -113,7 +113,7 @@ pub fn launch(mut sk: Sk, event_loop: EventLoop<StepperAction>, _is_testing: boo
         .add(WHITE, 1.0);
     let cube0 = SHCubemap::gen_cubemap_gradient(gradient_sky, Vec3::Y, 1024);
 
-    //save the default cubemap.
+    // save the default cubemap.
     let cube_default = SHCubemap::get_rendered_sky();
     cube0.render_as_sky();
     let mut sky = 1;
@@ -155,8 +155,7 @@ pub fn launch(mut sk: Sk, event_loop: EventLoop<StepperAction>, _is_testing: boo
             }
             Ui::same_line();
             if passthough_blend_enabled {
-                if let Some(new_value) = Ui::toggle("Passthrough MR", passthrough, None) {
-                    passthrough = new_value;
+                if let Some(new_value) = Ui::toggle("Passthrough MR", &mut passthrough, None) {
                     if new_value {
                         Log::diag("Activate passthrough");
                         Device::display_blend(DisplayBlend::AnyTransparent);
@@ -169,9 +168,8 @@ pub fn launch(mut sk: Sk, event_loop: EventLoop<StepperAction>, _is_testing: boo
             }
             Ui::next_line();
             Ui::hspace(0.11);
-            if let Some(new_value) = Ui::toggle("Show Log", show_log, None) {
-                show_log = new_value;
-                send_event_show_log(show_log.to_string());
+            if let Some(new_value) = Ui::toggle("Show Log", &mut show_log, None) {
+                send_event_show_log(new_value.to_string());
             }
             Ui::next_line();
             Ui::hseparator();

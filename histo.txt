@@ -1,6 +1,6 @@
  #------A bunch of commands you'll use here
  #---- installing
- cargo install --path ../StereoKit-rust
+ cargo install -F event-loop  stereokit-rust@0.4.0-alpha.2
  cargo compile_sks
  
 #---- building for pc
