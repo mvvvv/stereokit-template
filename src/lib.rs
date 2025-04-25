@@ -4,7 +4,7 @@ use std::sync::Mutex;
 use c_stepper::CStepper;
 use stereokit_rust::{
     framework::{SkClosures, StepperAction},
-    maths::{units::*, Pose, Quat, Vec2, Vec3},
+    maths::{Pose, Quat, Vec2, Vec3, units::*},
     sk::{DisplayBlend, Sk, SkInfo},
     sprite::Sprite,
     system::{Log, LogItem, LogLevel, Renderer},
@@ -12,8 +12,8 @@ use stereokit_rust::{
     tools::log_window::{LogWindow, SHOW_LOG_WINDOW},
     ui::{Ui, UiBtnLayout},
     util::{
-        named_colors::{BLUE, LIGHT_BLUE, LIGHT_CYAN, WHITE},
         Color128, Device, Gradient,
+        named_colors::{BLUE, LIGHT_BLUE, LIGHT_CYAN, WHITE},
     },
 };
 use winit::event_loop::EventLoop;
@@ -28,7 +28,7 @@ use winit::platform::android::activity::AndroidApp;
 
 #[allow(dead_code)]
 #[cfg(target_os = "android")]
-#[no_mangle]
+#[unsafe(no_mangle)]
 /// The main function for android app
 fn android_main(app: AndroidApp) {
     use stereokit_rust::sk::{DepthMode, OriginMode, SkSettings};
