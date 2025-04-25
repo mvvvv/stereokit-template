@@ -4,17 +4,16 @@ use std::sync::Mutex;
 use c_stepper::CStepper;
 use stereokit_rust::{
     framework::{SkClosures, StepperAction},
-    include_asset_tree,
-    maths::{units::*, Pose, Quat, Vec2, Vec3},
-    sk::{Sk, SkInfo},
+    maths::{Pose, Quat, Vec2, Vec3, units::*},
+    sk::{DisplayBlend, Sk, SkInfo},
     sprite::Sprite,
     system::{Log, LogItem, LogLevel, Renderer},
     tex::SHCubemap,
     tools::log_window::{LogWindow, SHOW_LOG_WINDOW},
     ui::{Ui, UiBtnLayout},
     util::{
+        Color128, Device, Gradient,
         named_colors::{BLUE, LIGHT_BLUE, LIGHT_CYAN, WHITE},
-        Color128, Gradient,
     },
 };
 use winit::event_loop::EventLoop;
@@ -29,7 +28,7 @@ use winit::platform::android::activity::AndroidApp;
 
 #[allow(dead_code)]
 #[cfg(target_os = "android")]
-#[no_mangle]
+#[unsafe(no_mangle)]
 /// The main function for android app
 fn android_main(app: AndroidApp) {
     use stereokit_rust::sk::{DepthMode, OriginMode, SkSettings};
@@ -45,7 +44,6 @@ fn android_main(app: AndroidApp) {
     android_logger::init_once(
         android_logger::Config::default().with_max_level(log::LevelFilter::Debug).with_tag("SKit-rs"),
     );
-
     let (sk, event_loop) = settings.init_with_event_loop(app).unwrap();
 
     _main(sk, event_loop);
@@ -92,7 +90,7 @@ pub fn launch(mut sk: Sk, event_loop: EventLoop<StepperAction>, _is_testing: boo
     // need a way to do that properly Log::unsubscribe(fn_mut);
 
     let mut log_window = LogWindow::new(&LOG_LOG);
-    log_window.pose = Pose::new(Vec3::new(-0.7, 2.0, -0.3), Some(Quat::look_dir(Vec3::new(1.0, 0.0, 1.0))));
+    log_window.window_pose = Pose::new(Vec3::new(-0.7, 2.0, -0.3), Some(Quat::look_dir(Vec3::new(1.0, 0.0, 1.0))));
 
     let mut show_log = false;
     log_window.enabled = false;
@@ -105,9 +103,6 @@ pub fn launch(mut sk: Sk, event_loop: EventLoop<StepperAction>, _is_testing: boo
     let mut window_demo_pose = Pose::new(Vec3::new(-0.7, 1.5, -0.3), Some(Quat::look_dir(Vec3::new(1.0, 0.0, 1.0))));
     let demo_win_width = 50.0 * CM;
 
-    // Log the assets directory:
-    Log::diag(format!("Assets : {:?}", include_asset_tree!("assets")));
-
     // we create a sky dome to be able to switch from the default sky dome
     let mut gradient_sky = Gradient::new(None);
     gradient_sky
@@ -118,7 +113,7 @@ pub fn launch(mut sk: Sk, event_loop: EventLoop<StepperAction>, _is_testing: boo
         .add(WHITE, 1.0);
     let cube0 = SHCubemap::gen_cubemap_gradient(gradient_sky, Vec3::Y, 1024);
 
-    //save the default cubemap.
+    // save the default cubemap.
     let cube_default = SHCubemap::get_rendered_sky();
     cube0.render_as_sky();
     let mut sky = 1;
@@ -126,6 +121,19 @@ pub fn launch(mut sk: Sk, event_loop: EventLoop<StepperAction>, _is_testing: boo
     // launch AStepper a basic stepper
     sk.send_event(StepperAction::add_default::<CStepper>("CStepper"));
 
+    let mut passthrough = true;
+    let mut passthough_blend_enabled = false;
+    if Device::valid_blend(DisplayBlend::AnyTransparent) {
+        passthough_blend_enabled = true;
+        if passthrough {
+            Device::display_blend(DisplayBlend::AnyTransparent);
+            Log::diag("Passthrough Activated at start !!");
+        } else {
+            Log::diag("Passthrough Deactived at start !!");
+        }
+    } else {
+        Log::diag("No Passthrough !!")
+    }
     Log::diag(
         "======================================================================================================== !!",
     );
@@ -146,11 +154,22 @@ pub fn launch(mut sk: Sk, event_loop: EventLoop<StepperAction>, _is_testing: boo
                 sky = 2;
             }
             Ui::same_line();
-            Ui::hspace(0.25);
-            Ui::same_line();
-            if let Some(new_value) = Ui::toggle("Show Log", show_log, None) {
-                show_log = new_value;
-                send_event_show_log(show_log.to_string());
+            if passthough_blend_enabled {
+                if let Some(new_value) = Ui::toggle("Passthrough MR", &mut passthrough, None) {
+                    if new_value {
+                        Log::diag("Activate passthrough");
+                        Device::display_blend(DisplayBlend::AnyTransparent);
+                    } else {
+                        Log::diag("Deactivate passthrough");
+                        Device::display_blend(DisplayBlend::Opaque);
+                    }
+                }
+                Ui::same_line();
+            }
+            Ui::next_line();
+            Ui::hspace(0.11);
+            if let Some(new_value) = Ui::toggle("Show Log", &mut show_log, None) {
+                send_event_show_log(new_value.to_string());
             }
             Ui::next_line();
             Ui::hseparator();
