@@ -10,7 +10,7 @@ use android_activity::AndroidApp;
 
 #[allow(dead_code)]
 #[cfg(target_os = "android")]
-#[no_mangle]
+#[unsafe(no_mangle)]
 /// The main function for android app
 fn android_main(app: AndroidApp) {
     let app_loop = app.clone();
