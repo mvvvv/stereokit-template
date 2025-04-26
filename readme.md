@@ -1,12 +1,14 @@
 ## Template for a basic stereokit-rust program
 There are two other templates (see the branches) if you prefer to use gradle for android or if you do not want to use winit and want to have an android version (gradle then being the only solution available)
 
-### Download the source project then this template:
-* git clone --recursive https://github.com/mvvvv/StereoKit-rust/
-* git clone https://github.com/mvvvv/stereokit-template/
-* For Windows only add to the PATH environment variable the directory ./target/debug/deps
+### If you never used stereokit-rust before, you have to install the prerequisites:
+See [installation](https://docs.rs/stereokit-rust/latest/stereokit_rust/#installation) and [how to build and test your application](https://docs.rs/stereokit-rust/latest/stereokit_rust/#how-to-build-and-test-your-application)
 
-First, check that you can launch the Stereokit-rust demos as described here https://github.com/mvvvv/StereoKit-rust/blob/master/README.md
+In order to use the build_sk_rs or compile_sks command you have to 'install' the project: `cargo install -F event-loop stereokit-rust`
+
+### Download this template:
+* git clone https://github.com/mvvvv/stereokit-template/
+* For Windows only and if you want to get DLLs add to the PATH environment variable the directory ./target/debug/deps
 
 Then, go to the Stereokit-template project and transform it to your project:
 - by renaming the name, package and labels in Cargo.toml, 
@@ -34,13 +36,12 @@ For Android you'll have to set a [keystore](https://developer.android.com/studio
 
 Binaries and APK archives are produced under ./target/release
 
-## Compile shaders:
-If you want to create your own shaders, you'll need the binary `compile_sks` of the stereokit-rust project and so you have to 'install' the project: 
-* `cargo install --path <path to git directory of Stereokit-rust>`
+## Compile shaders 
+Important: By default build_sk_rs compiles the shaders optimally for the target platform.
 
 `compile_sks` calls the stereokit binary `skshaderc` using the following configuration:
-* The shaders (*.hlsl files) must be created inside the shaders_src directory inside the root directory of your project. 
-* The result (*.hlsl.sks files) will be produced inside the assets/shaders directory inside the root directory of your project.
+* The shaders (*.hlsl files) must be created inside the `shaders_src` directory inside the root directory of your project. 
+* The result (*.hlsl.sks files) will be produced inside the `assets/shaders` directory inside the root directory of your project.
 
 To compile the *.hlsl files, go to the root directory of your project then launch `cargo compile_sks`
 
