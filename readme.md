@@ -1,11 +1,16 @@
 ## Template for a basic stereokit-rust program
+This template is for a basic stereokit-rust program using winit for the event loop and gradle for the Android build.
+
+There are two other templates (see the branches) if you prefer to not use gradle for android (main) or if you do not want to use winit and want to have an android version (gradle then being the only solution available).
+
+### If you never used stereokit-rust before, you have to install the prerequisites:
+See [installation](https://docs.rs/stereokit-rust/latest/stereokit_rust/#installation) and [how to build and test your application](https://docs.rs/stereokit-rust/latest/stereokit_rust/#how-to-build-and-test-your-application)
+
+In order to use the build_sk_rs or compile_sks command you have to 'install' the project: `cargo install -F event-loop stereokit-rust`
 
 ### Download the source project then this template:
-* git clone --recursive https://github.com/mvvvv/StereoKit-rust/
 * git clone -b gradle https://github.com/mvvvv/stereokit-gradle-template/
 * For Windows only add to the PATH environment variable the directory ./target/debug/deps
-
-First, check that you can launch the Stereokit-rust demos as described here https://github.com/mvvvv/StereoKit-rust/blob/master/README.md
 
 Then, go to the Stereokit-gradle-template project and transform it to your project:
 - by renaming the package.name in Cargo.toml, 
@@ -29,10 +34,6 @@ If you're using VsCode you'll see two launchers in launch.json to debug the proj
 
 
 ## Run the project on your Android headset thanks to gradle:
-* install openjdk v8 or v17
-* launch `cargo install cargo-ndk`
-* launch `rustup target add aarch64-linux-android `
-* create a [keystore](https://developer.android.com/studio/publish/app-signing) then a file [.gradle/gradle.properties](https://www.repeato.app/creating-a-release-signed-apk-file-using-gradle/) to store and forget the confidential values
 * Run the debug then show the Android log for this project
     - On Windows launch: `./gradlew.bat run && cmd /c logcat.cmd` or `(./gradlew.bat run) -and (cmd /c logcat.cmd)`
     - On others launch: `./gradlew run && sh logcat.cmd`
@@ -42,8 +43,7 @@ If you're using VsCode you'll see two launchers in launch.json to debug the proj
 * Android : `./gradlew buildRelease` &rarr; APK archive is produced under ./app/build/outputs/apk. You can install it with './gradlew installRelease'
 
 ## Compile shaders:
-If you want to create your own shaders, you'll need the binary `compile_sks` of the stereokit-rust project and so you have to 'install' the project: 
-* `cargo install --path <path to git directory of StereoKit-rust>`
+Important: By default build_sk_rs compiles the shaders optimally for the target platform.
 
 `compile_sks` calls the stereokit binary `skshaderc` using the following configuration:
 * The shaders (*.hlsl files) must be created inside the shaders_src directory inside the root directory of your project. 
