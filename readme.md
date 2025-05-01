@@ -22,14 +22,14 @@ The file AndroidManifest.xml is under the single Android module `./app` [where y
 
 ### Run your project on your PC's headset:
 * Make sure you have [OpenXR installed](https://www.khronos.org/openxr/) with an active runtine.
-* Launch: `cargo run`
+* Launch: `cargo run` (using Wayland on Linux may require to unset temporarily the DISPLAY variable: `DISPLAY= cargo run`)
 
 ### Run your project on your PC using the [simulator](https://stereokit.net/Pages/Guides/Using-The-Simulator.html): 
 * Launch: `cargo run  -- --test`
 
 If you're using VsCode you'll see two launchers in launch.json to debug the project.
 
-### Build and create an exportable repository of your PCVR program:
+### Build and create an exportable repository of your PC VR/MR program:
 `cargo build_sk_rs <the path of your exportable repository>`
 
 
@@ -50,6 +50,11 @@ Important: By default build_sk_rs compiles the shaders optimally for the target 
 * The result (*.hlsl.sks files) will be produced inside the assets/shaders directory inside the root directory of your project.
 
 To compile the *.hlsl files, go to the root directory of your project then launch `cargo compile_sks`
+
+## Run the documentation tests:
+
+This is the regular way to run the doc tests: `cargo test --doc` or `cargo test` but screenshots will fail on Wayland because of the DISPLAY variable. So you have to unset it before running the tests: `DISPLAY= cargo test`
+
 
 ## Troubleshooting
 Submit bugs on the [Issues tab](https://github.com/mvvvv/StereoKit-rust/issues), and ask questions in the [Discussions tab](https://github.com/mvvvv/StereoKit-rust/discussions)!
