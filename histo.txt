@@ -4,7 +4,7 @@
  cargo compile_sks
  
 #---- building for pc
-cargo run 
+DISPLAY= cargo run   #----unset the DISPLAY value on Wayland only!!!
 cargo run  -- --test`
 cargo build --release 
 cargo build_sk_rs ../sk_builds/SK_template_linux/
@@ -15,3 +15,6 @@ FORCE_LOCAL_DEPS=ON DEP_SK_GPU_SOURCE="/opt/sk_gpu" cargo build_sk_rs  --x64-win
 cargo compile_sks --options -f -t e
 cargo apk run --lib
 cargo apk build --lib --release 
+
+#---- Run tests with some test_screenshots!
+DISPLAY= cargo test  #---- unset the DISPLAY value on Wayland only!!!

@@ -56,6 +56,7 @@ pub fn _main(sk: Sk, event_loop: EventLoop<StepperAction>) {
     Sk::shutdown();
 }
 
+/// The main function for all platforms
 pub fn launch(mut sk: Sk, event_loop: EventLoop<StepperAction>, _is_testing: bool) {
     Log::diag(
         "======================================================================================================== !!",
@@ -137,6 +138,7 @@ pub fn launch(mut sk: Sk, event_loop: EventLoop<StepperAction>, _is_testing: boo
     Log::diag(
         "======================================================================================================== !!",
     );
+    dummy_function();
     let radio_on = Sprite::radio_on();
     let radio_off = Sprite::radio_off();
     SkClosures::run_app(
@@ -183,3 +185,23 @@ pub fn launch(mut sk: Sk, event_loop: EventLoop<StepperAction>, _is_testing: boo
         |sk| Log::info(format!("QuitReason is {:?}", sk.get_quit_reason())),
     );
 }
+
+/// You can add examples to your documentation using `test_init_sk!`, `test_screenshot!` or `test_steps!` macros,
+/// the same way they are used in the stereokit-rust documentation. Add the directory screenshots to your project to get
+/// the default screenshot.
+///  ### Examples
+/// ```
+/// # stereokit_rust::test_init_sk!(); // !!!! Get a proper way to initialize sk !!!!
+/// use stereokit_rust::{maths::{Vec3, Matrix, Quat}, util::{named_colors,Color32},
+///                      mesh::Mesh, material::Material};
+///
+/// // Create Meshes
+/// let cube = Mesh::generate_cube(Vec3::ONE * 0.8, None);
+/// let material_cube = Material::pbr().copy();
+/// let cube_transform = Matrix::r([40.0, 50.0, 20.0]);
+///
+/// test_screenshot!( // !!!! Get a proper main loop !!!!
+///     cube.draw(token, &material_cube, cube_transform, None, None);
+/// );
+/// ```
+fn dummy_function() {}
