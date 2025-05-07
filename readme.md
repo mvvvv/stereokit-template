@@ -19,12 +19,14 @@ Then, go to the Stereokit-template project and transform it to your project:
 * Launch: `cargo run` (using Wayland on Linux may require to unset temporarily the DISPLAY variable: `DISPLAY= cargo run`)
 
 ### Run your project on your PC using the [simulator](https://stereokit.net/Pages/Guides/Using-The-Simulator.html): 
-* Launch: `cargo run  -- --test`
+* Launch: `cargo run  -- --test` 
+
+if you want to give a more useful name to you executable (i.e.`my_main_app`), you'll have to use the --bin option: `cargo run --bin my_main_app -- --test`
 
 If you're using VsCode you'll see two launchers in launch.json to debug the project.
 
 ### Build and create an exportable repository of your PC VR/MR program:
-`cargo build_sk_rs <the path of your exportable repository>`
+`cargo build_sk_rs --bin main <the path of your exportable repository>`
 
 ## Run the project on your Android headset:
 * Launch: `cargo apk run --lib`
@@ -32,6 +34,7 @@ If you're using VsCode you'll see two launchers in launch.json to debug the proj
 ## Build the release versions of your project:
 For Android you'll have to set a [keystore](https://developer.android.com/studio/publish/app-signing). See [cargo-apk](https://github.com/rust-mobile/cargo-apk) to store the path and keyword
 * Desktop : `cargo build --release`
+  if you want to give a more useful name to you executable (i.e.`my_main_app`), you'll have to use the --bin option: `cargo build --release --bin my_main_app`
 * Android : `cargo apk build --lib --release`
 
 Binaries and APK archives are produced under ./target/release

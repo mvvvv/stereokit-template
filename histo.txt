@@ -5,11 +5,11 @@
  
 #---- building for pc
 DISPLAY= cargo run   #----unset the DISPLAY value on Wayland only!!!
-cargo run  -- --test`
-cargo build --release 
-cargo build_sk_rs ../sk_builds/SK_template_linux/
-cargo build_sk_rs  --x64-win-gnu ../x64-mingw-libs/  ../sk_builds/SK_template_win_gnu/
-FORCE_LOCAL_DEPS=ON DEP_SK_GPU_SOURCE="/opt/sk_gpu" cargo build_sk_rs  --x64-win-gnu ../x64-mingw-libs/ ../sk_builds/SK_template_win_gnu/
+cargo run  -- --test`  #aka: cargo run --bin main -- --test
+cargo build --release  #aka: cargo build --release --bin main
+cargo build_sk_rs --bin main ../sk_builds/SK_template_linux/
+cargo build_sk_rs --bin main  --x64-win-gnu ../x64-mingw-libs/  ../sk_builds/SK_template_win_gnu/
+FORCE_LOCAL_DEPS=ON DEP_SK_GPU_SOURCE="/opt/sk_gpu" cargo build_sk_rs --bin main --x64-win-gnu ../x64-mingw-libs/ ../sk_builds/SK_template_win_gnu/
 
 #---- building for android
 cargo compile_sks --options -f -t e
