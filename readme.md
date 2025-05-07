@@ -25,12 +25,14 @@ The file AndroidManifest.xml is under the single Android module `./app` [where y
 * Launch: `cargo run` (using Wayland on Linux may require to unset temporarily the DISPLAY variable: `DISPLAY= cargo run`)
 
 ### Run your project on your PC using the [simulator](https://stereokit.net/Pages/Guides/Using-The-Simulator.html): 
-* Launch: `cargo run  -- --test`
+* Launch: `cargo run  -- --test` 
+
+if you want to give a more useful name to you executable (i.e.`my_main_app`), you'll have to use the --bin option: `cargo run --bin my_main_app -- --test`
 
 If you're using VsCode you'll see two launchers in launch.json to debug the project.
 
 ### Build and create an exportable repository of your PC VR/MR program:
-`cargo build_sk_rs <the path of your exportable repository>`
+`cargo build_sk_rs --bin main <the path of your exportable repository>`
 
 
 ## Run the project on your Android headset thanks to gradle:
@@ -39,7 +41,9 @@ If you're using VsCode you'll see two launchers in launch.json to debug the proj
     - On others launch: `./gradlew run && sh logcat.cmd`
 
 ## Build the release versions of your project:
-* Desktop : `cargo build --release` &rarr; Binaries are produced under ./target/release
+For Android you'll have to set a [keystore](https://docs.rs/stereokit-rust/latest/stereokit_rust/#building-your-android-vrmr-app).
+* Desktop : `cargo build --release`
+  if you want to give a more useful name to you executable (i.e.`my_main_app`), you'll have to use the --bin option: `cargo build --release --bin my_main_app`
 * Android : `./gradlew buildRelease` &rarr; APK archive is produced under ./app/build/outputs/apk. You can install it with './gradlew installRelease'
 
 ## Compile shaders:
