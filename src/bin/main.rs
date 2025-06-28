@@ -28,14 +28,14 @@ fn main() {
         match &arg[..] {
             "--headless" => headless = true,
             "--test" => is_testing = true,
-            "--help" => println!("{}", USAGE),
+            "--help" => println!("{USAGE}"),
             _ => {
                 if arg.starts_with('-') {
-                    println!("Unkown argument {}", arg);
+                    println!("Unkown argument {arg}");
                 } else {
-                    println!("Unkown positional argument {}", arg);
+                    println!("Unkown positional argument {arg}");
                 }
-                println!("{}", USAGE);
+                println!("{USAGE}");
             }
         }
     }
