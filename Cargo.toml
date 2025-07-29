@@ -7,7 +7,10 @@ keywords = ["stereokit", "XR", "VR", "AR", "sys"]
 license = "MIT"
 repository = "https://github.com/mvvvv/StereoKit-template"
 readme = "README.md"
- 
+
+[features]
+test-xr-mode = []   #---needed if you want to use stereokit-rust test macros
+
 [lib]
 crate-type = ["lib", "cdylib"]
 

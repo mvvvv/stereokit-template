@@ -61,7 +61,7 @@ pub fn launch(mut sk: Sk, event_loop: EventLoop<StepperAction>, _is_testing: boo
     Log::diag(
         "======================================================================================================== !!",
     );
-    Renderer::scaling(1.5);
+    Renderer::scaling(1.0);
     Renderer::multisample(4);
 
     // We want to be able to view the log using the LogWindow tool
