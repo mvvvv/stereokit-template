@@ -43,7 +43,7 @@ fn main() {
     settings
         .app_name("rust_gradle")
         .origin(OriginMode::Floor)
-        .render_scaling(2.0)
+        .render_scaling(1.0)
         .depth_mode(DepthMode::D32)
         .omit_empty_frames(true)
         .log_filter(LogLevel::Diagnostic)
