@@ -1,1 +1,1 @@
-adb logcat -v color --uid 10152
+adb logcat -v color --uid 10138
