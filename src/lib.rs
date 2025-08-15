@@ -7,7 +7,7 @@ use stereokit_rust::{
     maths::{Pose, Quat, Vec2, Vec3, units::*},
     sk::{DisplayBlend, Sk, SkInfo},
     sprite::Sprite,
-    system::{Log, LogItem, LogLevel, Renderer},
+    system::{Log, LogItem, LogLevel},
     tex::SHCubemap,
     tools::log_window::{LogWindow, SHOW_LOG_WINDOW},
     ui::{Ui, UiBtnLayout},
@@ -38,7 +38,7 @@ fn android_main(app: AndroidApp) {
         .origin(OriginMode::Floor)
         .render_multisample(4)
         .render_scaling(2.0)
-        .depth_mode(DepthMode::Stencil)
+        .depth_mode(DepthMode::D32)
         .log_filter(LogLevel::Diagnostic);
 
     android_logger::init_once(
@@ -61,8 +61,6 @@ pub fn launch(mut sk: Sk, event_loop: EventLoop<StepperAction>, _is_testing: boo
     Log::diag(
         "======================================================================================================== !!",
     );
-    Renderer::scaling(1.0);
-    Renderer::multisample(4);
 
     // We want to be able to view the log using the LogWindow tool
     let fn_mut = |level: LogLevel, log_text: &str| {
@@ -74,11 +72,11 @@ pub fn launch(mut sk: Sk, event_loop: EventLoop<StepperAction>, _is_testing: boo
                     if pos > 0 {
                         sub_string.insert_str(0, "‣‣‣‣");
                     }
-                    if let Some(item) = items.last_mut() {
-                        if item.text == sub_string {
-                            item.count += 1;
-                            continue;
-                        }
+                    if let Some(item) = items.last_mut()
+                        && item.text == sub_string
+                    {
+                        item.count += 1;
+                        continue;
                     }
 
                     items.push(LogItem { level, text: sub_string.to_owned(), count: 1 });
