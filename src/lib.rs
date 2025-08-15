@@ -29,7 +29,7 @@ fn android_main(app: AndroidApp) {
                 .origin(OriginMode::Floor)
                 .render_multisample(4)
                 .render_scaling(2.0)
-                .depth_mode(DepthMode::Stencil)
+                .depth_mode(DepthMode::D32)
                 .log_filter(LogLevel::Diagnostic);
 
             android_logger::init_once(
